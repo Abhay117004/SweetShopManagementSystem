@@ -1,31 +1,28 @@
 {
   "version": 2,
-  "buildCommand": "chmod +x build.sh && ./build.sh",
+  "buildCommand": "cd Vercel && bash build.sh",
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "Vercel/api/index.py",
       "use": "@vercel/python"
     },
     {
-      "src": "frontend/**",
+      "src": "Vercel/frontend/**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "Vercel/api/index.py"
     },
     {
       "src": "/(.*\\.(js|jsx|css|html|png|jpg|jpeg|gif|svg|ico))",
-      "dest": "/frontend/$1"
+      "dest": "Vercel/frontend/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/index.html"
+      "dest": "Vercel/frontend/index.html"
     }
-  ],
-  "env": {
-    "FLASK_ENV": "production"
-  }
+  ]
 }
