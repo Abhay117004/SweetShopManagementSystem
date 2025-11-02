@@ -41,20 +41,20 @@
                 console.log('User authenticated:', user.email);
                 window.currentUser = user;
                 
-                // Just load the JSX file directly - Babel will handle it
-                const appScript = document.createElement('script');
-                appScript.type = 'text/babel';
-                appScript.setAttribute('data-type', 'module');
-                appScript.setAttribute('data-presets', 'react');
-                appScript.src = 'app.jsx';
+                // Manually trigger Babel to load and transform app.jsx
+                console.log('Loading app.jsx...');
+                const script = document.createElement('script');
+                script.type = 'text/babel';
+                script.src = 'app.jsx';
+                script.setAttribute('data-presets', 'react');
                 
-                appScript.onload = () => console.log('App loaded successfully!');
-                appScript.onerror = (e) => {
+                script.onload = () => console.log('app.jsx loaded!');
+                script.onerror = (e) => {
                     console.error('Failed to load app.jsx:', e);
-                    document.getElementById('root').innerHTML = '<div style="padding:40px;text-align:center;"><h2>Failed to load app</h2><p>Check console</p><button onclick="location.reload()">Retry</button></div>';
+                    document.getElementById('root').innerHTML = '<div style="padding:40px;text-align:center;color:red;"><h2>Error loading app</h2><p>Check console for details</p><button onclick="location.reload()" style="padding:10px 20px;font-size:16px;cursor:pointer;">Reload</button></div>';
                 };
                 
-                document.body.appendChild(appScript);
+                document.body.appendChild(script);
             }
         });
 

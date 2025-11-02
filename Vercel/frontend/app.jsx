@@ -780,5 +780,8 @@ function OrderModal({ onClose, onSuccess }) {
     );
 }
 
+// This script only runs after auth is complete (window.currentUser is set)
+console.log('app.jsx executing for user:', window.currentUser?.email);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
