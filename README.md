@@ -2,6 +2,7 @@
 
 A complete web-based management system for sweet shops, built with Flask and React. This application helps shop owners manage their inventory, customers, and orders efficiently.
 
+**NOTE** - This website i deployed and can be accessed via the followng link https://sweet-shop-management-system-five-umber.vercel.app/
 ## Features
 
 - **Firebase Authentication** with email/password and Google OAuth
