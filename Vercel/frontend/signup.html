@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Mithai Mandir</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="auth-brand">
+                <div class="brand-icon">🪔</div>
+                <h1>Mithai Mandir</h1>
+                <p>Premium Indian Sweets Management</p>
+            </div>
+            <div class="auth-illustration">
+                <div class="illustration-circle"></div>
+                <div class="illustration-text">
+                    <h2>Start Managing Today</h2>
+                    <p>Join thousands of sweet shop owners streamlining their business</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <h2>Create Account</h2>
+                    <p>Sign up to get started with Mithai Mandir</p>
+                </div>
+
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                <form id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            placeholder="John Doe"
+                            required
+                            autocomplete="name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="you@example.com"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Create a password"
+                            required
+                            autocomplete="new-password"
+                            minlength="6"
+                        >
+                        <small class="form-hint">Must be at least 6 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="Confirm your password"
+                            required
+                            autocomplete="new-password"
+                        >
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" required>
+                            <span>I agree to the <a href="#">Terms & Conditions</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="signupBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-loader" style="display: none;">
+                            <span class="loader"></span>
+                        </span>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="social-login">
+                    <button class="btn btn-social" id="googleBtn">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                            <path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/>
+                            <path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/>
+                            <path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/>
+                        </svg>
+                        Google
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="login.html">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const app = initializeApp(window.FIREBASE_CONFIG);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        const signupForm = document.getElementById('signupForm');
+        const signupBtn = document.getElementById('signupBtn');
+        const googleBtn = document.getElementById('googleBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function setLoading(isLoading) {
+            const btnText = signupBtn.querySelector('.btn-text');
+            const btnLoader = signupBtn.querySelector('.btn-loader');
+            
+            if (isLoading) {
+                btnText.style.display = 'none';
+                btnLoader.style.display = 'inline-block';
+                signupBtn.disabled = true;
+            } else {
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                signupBtn.disabled = false;
+            }
+        }
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setLoading(true);
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                setLoading(false);
+                showError('Passwords do not match.');
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                await updateProfile(userCredential.user, {
+                    displayName: fullName
+                });
+                
+                localStorage.setItem('user', JSON.stringify({
+                    uid: userCredential.user.uid,
+                    email: userCredential.user.email,
+                    displayName: fullName
+                }));
+
+                window.location.href = 'index.html';
+            } catch (error) {
+                setLoading(false);
+                let message = 'Failed to create account. Please try again.';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    message = 'This email is already registered. Try signing in instead.';
+                } else if (error.code === 'auth/invalid-email') {
+                    message = 'Invalid email address.';
+                } else if (error.code === 'auth/weak-password') {
+                    message = 'Password is too weak. Please use a stronger password.';
+                }
+                
+                showError(message);
+            }
+        });
+
+        googleBtn.addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                
+                localStorage.setItem('user', JSON.stringify({
+                    uid: result.user.uid,
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    photoURL: result.user.photoURL
+                }));
+
+                window.location.href = 'index.html';
+            } catch (error) {
+                let message = 'Failed to sign up with Google.';
+                
+                if (error.code === 'auth/popup-closed-by-user') {
+                    message = 'Sign up cancelled.';
+                } else if (error.code === 'auth/popup-blocked') {
+                    message = 'Popup blocked. Please allow popups for this site.';
+                }
+                
+                showError(message);
+            }
+        });
+    </script>
+</body>
+</html>
