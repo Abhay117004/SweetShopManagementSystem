@@ -37,8 +37,8 @@ instance/
 .env.local
 .env.*.local
 
-# Firebase config - keep out of git for best practice
-frontend/firebase-config.js
+# Note: Firebase config is committed (Firebase keys are public by design)
+# Real secrets (DATABASE_URL, SECRET_KEY) are in Vercel env vars only
 
 # IDE
 .vscode/

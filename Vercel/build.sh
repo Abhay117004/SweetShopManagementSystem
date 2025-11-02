@@ -1,15 +1,15 @@
 #!/bin/bash
 
-echo "🔧 Generating Firebase configuration..."
+echo "Checking Firebase configuration..."
 
-# Check if required environment variables are set
 if [ -z "$FIREBASE_API_KEY" ]; then
-  echo "❌ ERROR: FIREBASE_API_KEY environment variable is not set!"
-  echo "Please set all required Firebase environment variables in Vercel dashboard."
-  exit 1
+  echo "No Firebase environment variables found"
+  echo "Using committed firebase-config.js file"
+  exit 0
 fi
 
-# Use environment variables
+echo "Generating Firebase config from environment variables..."
+
 API_KEY="${FIREBASE_API_KEY}"
 AUTH_DOMAIN="${FIREBASE_AUTH_DOMAIN}"
 PROJECT_ID="${FIREBASE_PROJECT_ID}"
@@ -36,5 +36,5 @@ const firebaseConfig = {
 window.FIREBASE_CONFIG = firebaseConfig;
 EOF
 
-echo "✅ Firebase config generated successfully!"
-echo "   Using API Key: ${API_KEY:0:20}..."
+echo "Firebase config generated successfully!"
+echo "Using API Key: ${API_KEY:0:20}..."
