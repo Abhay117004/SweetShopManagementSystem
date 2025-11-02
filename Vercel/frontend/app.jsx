@@ -147,6 +147,13 @@ function Dashboard() {
             setStats(response.data);
         } catch (error) {
             console.error('Error fetching stats:', error);
+            // Set default stats if API fails
+            setStats({
+                total_sweets: 0,
+                total_customers: 0,
+                total_orders: 0,
+                total_revenue: 0
+            });
         } finally {
             setLoading(false);
         }
@@ -204,9 +211,10 @@ function Sweets({ showNotification, showConfirm }) {
     const fetchSweets = async () => {
         try {
             const response = await axios.get(`${API_URL}/sweets`);
-            setSweets(response.data);
+            setSweets(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching sweets:', error);
+            setSweets([]);
         } finally {
             setLoading(false);
         }
@@ -429,9 +437,10 @@ function Customers({ showNotification, showConfirm }) {
     const fetchCustomers = async () => {
         try {
             const response = await axios.get(`${API_URL}/customers`);
-            setCustomers(response.data);
+            setCustomers(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching customers:', error);
+            setCustomers([]);
         } finally {
             setLoading(false);
         }
@@ -589,9 +598,10 @@ function Orders({ showNotification, showConfirm }) {
     const fetchOrders = async () => {
         try {
             const response = await axios.get(`${API_URL}/orders`);
-            setOrders(response.data);
+            setOrders(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error('Error fetching orders:', error);
+            setOrders([]);
         } finally {
             setLoading(false);
         }
@@ -714,8 +724,12 @@ function OrderModal({ onClose, onSuccess }) {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        axios.get(`${API_URL}/customers`).then(res => setCustomers(res.data));
-        axios.get(`${API_URL}/sweets`).then(res => setSweets(res.data));
+        axios.get(`${API_URL}/customers`)
+            .then(res => setCustomers(Array.isArray(res.data) ? res.data : []))
+            .catch(err => { console.error(err); setCustomers([]); });
+        axios.get(`${API_URL}/sweets`)
+            .then(res => setSweets(Array.isArray(res.data) ? res.data : []))
+            .catch(err => { console.error(err); setSweets([]); });
     }, []);
 
     const addItem = () => setFormData({ ...formData, items: [...formData.items, { sweet_id: '', quantity: 1 }] });

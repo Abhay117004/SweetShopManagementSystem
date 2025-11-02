@@ -521,9 +521,8 @@ def get_categories():
 
 # Initialize database tables
 with app.app_context():
-    db.create_all()
-
-
-# Export the app for Vercel
-def handler(request):
-    return app(request)
+    try:
+        db.create_all()
+        print("Database tables created successfully")
+    except Exception as e:
+        print(f"Error creating tables: {e}")
