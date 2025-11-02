@@ -8,72 +8,46 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
+</head>
+<body>
+    <div id="root">
+        <div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;">
+            <div style="text-align:center;">
+                <div style="font-size:48px;margin-bottom:20px;">🪔</div>
+                <div style="font-size:18px;color:#666;">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load all scripts in proper order -->
     <script src="firebase-config.js"></script>
-    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/axios@1.6.0/dist/axios.min.js"></script>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-
-        // Show loading state
-        document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;"><div style="text-align:center;"><div style="font-size:48px;margin-bottom:20px;">🪔</div><div style="font-size:18px;color:#666;">Loading...</div></div></div>';
 
         const app = initializeApp(window.FIREBASE_CONFIG);
         const auth = getAuth(app);
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
-                // Not logged in - redirect to login
                 console.log('No user found, redirecting to login...');
                 window.location.href = 'login.html';
             } else {
-                // User is logged in - show the app
                 console.log('User authenticated:', user.email);
                 window.currentUser = user;
                 
-                // Clear loading and show app
-                document.body.innerHTML = '<div id="root"></div>';
-                
-                // Load React and app after auth confirmation
-                loadApp();
+                // Load the React app
+                const appScript = document.createElement('script');
+                appScript.type = 'text/babel';
+                appScript.src = 'app.jsx?v=' + Date.now();
+                document.body.appendChild(appScript);
             }
         });
-
-        function loadApp() {
-            // Load React scripts
-            const reactScript = document.createElement('script');
-            reactScript.src = 'https://unpkg.com/react@18/umd/react.production.min.js';
-            reactScript.crossOrigin = 'anonymous';
-            
-            const reactDomScript = document.createElement('script');
-            reactDomScript.src = 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js';
-            reactDomScript.crossOrigin = 'anonymous';
-            
-            const babelScript = document.createElement('script');
-            babelScript.src = 'https://unpkg.com/@babel/standalone/babel.min.js';
-            
-            const axiosScript = document.createElement('script');
-            axiosScript.src = 'https://unpkg.com/axios@1.6.0/dist/axios.min.js';
-            
-            const appScript = document.createElement('script');
-            appScript.type = 'text/babel';
-            appScript.src = 'app.jsx?v=1';
-            
-            // Load in sequence
-            document.body.appendChild(reactScript);
-            reactScript.onload = () => {
-                document.body.appendChild(reactDomScript);
-                reactDomScript.onload = () => {
-                    document.body.appendChild(babelScript);
-                    babelScript.onload = () => {
-                        document.body.appendChild(axiosScript);
-                        axiosScript.onload = () => {
-                            document.body.appendChild(appScript);
-                        };
-                    };
-                };
-            };
-        }
 
         window.handleLogout = async () => {
             try {
@@ -86,7 +60,5 @@
             }
         };
     </script>
-</head>
-<body>
 </body>
 </html>
