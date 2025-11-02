@@ -37,8 +37,8 @@ instance/
 .env.local
 .env.*.local
 
-# Firebase config with real credentials
-firebase-config.js
+# Firebase config - keep out of git for best practice
+frontend/firebase-config.js
 
 # IDE
 .vscode/

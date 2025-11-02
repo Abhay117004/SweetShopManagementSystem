@@ -1,28 +1,3 @@
 {
-  "version": 2,
-  "buildCommand": "cd Vercel && bash build.sh",
-  "builds": [
-    {
-      "src": "Vercel/api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "Vercel/frontend/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "Vercel/api/index.py"
-    },
-    {
-      "src": "/(.*\\.(js|jsx|css|html|png|jpg|jpeg|gif|svg|ico))",
-      "dest": "Vercel/frontend/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "Vercel/frontend/index.html"
-    }
-  ]
+  "version": 2
 }
