@@ -33,7 +33,7 @@
         const app = initializeApp(window.FIREBASE_CONFIG);
         const auth = getAuth(app);
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 console.log('No user found, redirecting to login...');
                 window.location.href = 'login.html';
@@ -41,20 +41,26 @@
                 console.log('User authenticated:', user.email);
                 window.currentUser = user;
                 
-                // Manually trigger Babel to load and transform app.jsx
                 console.log('Loading app.jsx...');
-                const script = document.createElement('script');
-                script.type = 'text/babel';
-                script.src = 'app.jsx';
-                script.setAttribute('data-presets', 'react');
                 
-                script.onload = () => console.log('app.jsx loaded!');
-                script.onerror = (e) => {
-                    console.error('Failed to load app.jsx:', e);
-                    document.getElementById('root').innerHTML = '<div style="padding:40px;text-align:center;color:red;"><h2>Error loading app</h2><p>Check console for details</p><button onclick="location.reload()" style="padding:10px 20px;font-size:16px;cursor:pointer;">Reload</button></div>';
-                };
-                
-                document.body.appendChild(script);
+                try {
+                    // Fetch the JSX file
+                    const response = await fetch('app.jsx');
+                    const jsxCode = await response.text();
+                    console.log('app.jsx fetched, transforming with Babel...');
+                    
+                    // Transform JSX to JS using Babel
+                    const transformed = Babel.transform(jsxCode, { presets: ['react'] }).code;
+                    console.log('Babel transformation complete, executing...');
+                    
+                    // Execute the transformed code
+                    eval(transformed);
+                    console.log('App loaded successfully!');
+                    
+                } catch (error) {
+                    console.error('Error loading app:', error);
+                    document.getElementById('root').innerHTML = '<div style="padding:40px;text-align:center;color:red;"><h2>Error: ' + error.message + '</h2><button onclick="location.reload()" style="padding:10px 20px;margin-top:20px;font-size:16px;cursor:pointer;background:#ff4444;color:white;border:none;border-radius:8px;">Reload Page</button></div>';
+                }
             }
         });
 
