@@ -46,7 +46,7 @@ class Sweet(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, default=0)
     category = db.Column(db.String(50))
-    image_url = db.Column(db.String(200))
+    image_url = db.Column(db.String(100000))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -524,5 +524,17 @@ with app.app_context():
     try:
         db.create_all()
         print("Database tables created successfully")
+
+        # Migration: Update image_url column to TEXT if it exists as VARCHAR
+        try:
+            db.session.execute(
+                db.text("ALTER TABLE sweets ALTER COLUMN image_url TYPE TEXT"))
+            db.session.commit()
+            print("Migration: Updated image_url to TEXT type")
+        except Exception as migration_error:
+            db.session.rollback()
+            print(
+                f"Migration note (may already be applied): {migration_error}")
+
     except Exception as e:
         print(f"Error creating tables: {e}")
