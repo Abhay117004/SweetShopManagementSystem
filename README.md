@@ -227,12 +227,104 @@ git remote add origin <your-repository-url>
 git push -u origin main
 ```
 
-### Vercel / Other Platforms
-The backend can be deployed as a standard Flask application. For frontend:
-1. Deploy the backend to your preferred hosting (Heroku, Railway, etc.)
-2. Update the API_URL in `frontend/app.jsx`
-3. Deploy frontend to Vercel, Netlify, or Firebase Hosting
-4. Update authorized domains in Firebase Console
+### Vercel Deployment (Recommended)
 
-**Important:** Remember to update Firebase configuration with your production domain in the Firebase Console under Authentication > Settings > Authorized domains.
+This application is optimized for **Vercel** deployment with serverless functions:
+
+**Prerequisites:**
+
+- Vercel account (free tier works)
+- PostgreSQL database (Neon, Supabase, or any PostgreSQL provider)
+- Firebase project configured
+
+**Deployment Steps:**
+
+1. **Prepare Environment Variables**
+
+   In Vercel Dashboard → Settings → Environment Variables, add:
+
+   ```env
+   DATABASE_URL_UNPOOLED=postgresql://username:password@host:port/database
+   FIREBASE_API_KEY=your_firebase_api_key
+   FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+   FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   FIREBASE_APP_ID=your_app_id
+   FIREBASE_MEASUREMENT_ID=your_measurement_id
+   ```
+
+2. **Deploy to Vercel**
+
+   ```bash
+   # Install Vercel CLI
+   npm i -g vercel
+
+   # Deploy from the Vercel folder
+   cd Vercel
+   vercel
+   ```
+
+   Or connect your GitHub repository in Vercel Dashboard for automatic deployments.
+
+3. **Configure Root Directory**
+
+   - In Vercel Dashboard → Settings → General
+   - Set Root Directory to `Vercel`
+   - Or use the root `vercel.json` file which handles this automatically
+
+4. **Update Firebase Console**
+
+   - Go to Firebase Console → Authentication → Settings
+   - Add your Vercel domain to Authorized domains (e.g., `your-app.vercel.app`)
+
+**Project Structure for Vercel:**
+
+```text
+Vercel/
+├── api/
+│   └── index.py         # Serverless Flask API (@vercel/python)
+├── frontend/
+│   ├── index.html       # Main app
+│   ├── login.html       # Login page
+│   ├── signup.html      # Signup page
+│   ├── forgot-password.html
+│   ├── app.jsx          # React components
+│   ├── style.css
+│   ├── auth.css
+│   └── firebase-config.js
+├── vercel.json          # Deployment configuration
+└── requirements.txt     # Python dependencies
+```
+
+**Key Features of Vercel Deployment:**
+
+- ✅ Serverless Flask backend with PostgreSQL
+- ✅ Static frontend hosting with CDN
+- ✅ Automatic HTTPS
+- ✅ Environment variable management
+- ✅ Automatic deployments on Git push
+- ✅ Zero-downtime deployments
+- ✅ Global edge network
+
+**Database Setup:**
+
+- Use Neon, Supabase, or any PostgreSQL provider
+- Tables are created automatically on first deployment
+- Copy the connection string and add it to Vercel environment variables as `DATABASE_URL_UNPOOLED`
+
+**Live Demo:**
+
+<https://sweet-shop-management-system-five-umber.vercel.app/>
+
+### Other Platforms
+
+The backend can also be deployed as a standard Flask application:
+
+1. Deploy the backend to Heroku, Railway, Render, etc.
+2. Update the API_URL in `frontend/app.jsx`
+3. Deploy frontend to Netlify or Firebase Hosting
+4. Update CORS settings in backend if needed
+
+**Important:** Remember to update Firebase configuration with your production domain in the Firebase Console under Authentication → Settings → Authorized domains.
 
