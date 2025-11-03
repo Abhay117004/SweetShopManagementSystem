@@ -1,330 +1,94 @@
-# Mithai Mandir - Sweet Shop Management System
+Mithai Mandir: A Full-Stack Confectionery Management SystemThis document provides a comprehensive technical overview of the Mithai Mandir system, a full-stack web application architected for the meticulous management of a confectionery enterprise's inventory, clientele data, and order-processing workflows. The system is implemented utilizing a Flask-based server-side component and a React-based client-side interface (loaded via Content Delivery Network).Access the Live Deployment🌟 Core System FeaturesFirebase Authentication: Integration of a secure user authentication subsystem, facilitating login and registration via email/password credentials and Google OAuth.Product (Sweets) Management: Comprehensive support for all CRUD (Create, Read, Update, Delete) operations pertaining to product data, inclusive of image URL support.Clientele Management: Maintenance of a complete, persistent database repository for customer information.Order Management: A workflow for the creation, monitoring, and status updating of transactional orders.Inventory Control: An automated mechanism for the dynamic adjustment of stock levels, correlating directly with order creation and cancellation events.Analytical Dashboard: A high-level interface presenting key performance indicators and aggregate metrics, such as total sales, customer counts, and product quantities.Responsive Design: The user interface is implemented utilizing responsive design principles to ensure functional parity and visual integrity across desktop and mobile platforms.🛠️ Technological StackThe system's implementation is founded upon the following technological components:DomainConstituent TechnologiesBackendPython 3.12, Flask 3.0, SQLAlchemy 3.1, SQLite (local), PostgreSQL (prod)FrontendReact 18 (via CDN), JSX (transpiled by Babel), HTML5, CSS3, AxiosAuth & DeployFirebase Authentication, Vercel🚀 System Setup and Deployment ProceduresThe application supports two primary execution modes: local development and production deployment via Vercel.1. Firebase Prerequisite (Mandatory)Utilization of this application is contingent upon the pre-configuration of Firebase Authentication.Navigation to the Firebase Console is required, followed by the creation of a new project.A new Web App must be provisioned within the project.Within the Authentication > Sign-in method section, the following methodologies must be enabled:Email/PasswordGoogle (Optional)The firebaseConfig object must be extracted from the Web App's configuration settings.The file frontend/example_firebase-config.js is to be located and renamed to frontend/firebase-config.js.This configuration object must be inserted into both of the following file locations, superseding any placeholder data:frontend/firebase-config.js (designated for local development)Vercel/frontend/firebase-config.js (designated for production deployment)2. Local Development EnvironmentExecution within a local environment necessitates the concurrent operation of two distinct server processes.Process 1: Backend Server Initiation (API)# 1. The repository must be cloned
+git clone [https://github.com/Abhay117004/SweetShopManagementSystem.git](https://github.com/Abhay117004/SweetShopManagementSystem.git)
+cd SweetShopManagementSystem
 
-A complete web-based management system for sweet shops, built with Flask and React. This application helps shop owners manage their inventory, customers, and orders efficiently.
-
-**NOTE** - This website is deployed and can be accessed via the followng link https://sweet-shop-management-system-five-umber.vercel.app/
-## Features
-
-- **Firebase Authentication** with email/password and Google OAuth
-- Secure user login and registration system
-- Product catalog with image support
-- Customer database management
-- Order processing with real-time inventory updates
-- Dashboard with business analytics
-- Search and filter capabilities
-- Responsive design for mobile and desktop
-
-## Technology Stack
-
-**Backend:**
-- Python 3.12
-- Flask 3.0.0
-- SQLAlchemy 3.1.1
-- SQLite database
-- Flask-CORS 4.0.0
-
-**Frontend:**
-- React 18
-- JavaScript ES6+
-- CSS3
-- Axios for API calls
-
-## Project Structure
-
-```
-├── backend/
-│   ├── app.py              # Flask application
-│   ├── database.py         # Database configuration
-│   ├── models.py           # Data models
-│   ├── routes.py           # API routes
-│   └── seed_data.py        # Sample data
-├── frontend/
-│   ├── index.html          # Main HTML file
-│   ├── style.css           # Styles
-│   └── app.jsx             # React components
-├── api/
-│   └── index.py            # Serverless entry point
-├── requirements.txt        # Python dependencies
-├── vercel.json             # Deployment config
-└── README.md
-```
-
-## Installation and Setup
-
-### Prerequisites
-- Python 3.12+
-- Git
-- Firebase account (for authentication)
-
-### Quick Start
-
-**Option 1: Use the startup scripts (Recommended)**
-```bash
-# Windows
-start.bat
-
-# Mac/Linux
-./start.sh
-```
-
-**Option 2: Manual setup**
-
-1. Clone the repository:
-```bash
-git clone <your-repository-url>
-cd mithai-mandir
-```
-
-2. Create and activate virtual environment:
-```bash
+# 2. A Python virtual environment is to be created and activated
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Mac/Linux
-```
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
 
-3. Install dependencies:
-```bash
+# 3. All requisite Python dependencies must be installed from the root directory
 pip install -r requirements.txt
-```
 
-4. **Configure Firebase Authentication:**
-   - Follow the guide in `FIREBASE_SETUP.md`
-   - Update Firebase config in `frontend/login.html`, `frontend/signup.html`, and `frontend/index.html`
-
-5. Run the backend server:
-```bash
+# 4. The Flask server process is to be initiated from the 'backend' directory.
+# This action will also provision the 'app.db' SQLite database file within said directory.
 cd backend
 python app.py
-```
-The API will be available at `http://localhost:5000`
 
-6. Serve the frontend (in a new terminal):
-```bash
+# ✅ The backend service will subsequently be available at http://localhost:5000
+
+
+
+Process 2: Frontend Server Initiation# 1. From a new terminal instance, navigate to the project's root directory
+cd SweetShopManagementSystem
+
+# 2. Transition to the primary frontend directory
 cd frontend
+
+# 3. A static file server must be initiated
 python -m http.server 8000
-```
 
-7. Open your browser and navigate to:
-   - Login page: `http://localhost:8000/login.html`
-   - Or directly: `http://localhost:8000` (will redirect to login if not authenticated)
+# ✅ The frontend application will subsequently be accessible at http://localhost:8000
 
-The application will automatically create a SQLite database with sample data on first run.
 
-## Usage
 
-The application has four main sections:
+Upon completion of these steps, the application can be accessed via a web browser at http://localhost:8000.3. Production Deployment (Vercel)The project is architected for production deployment from the Vercel directory.A fork of the repository must be created under the deploying entity's GitHub account.A PostgreSQL database instance is required. This may be provisioned from a cloud database provider (e.g., Neon, Supabase). The PostgreSQL Connection String must be obtained.The Vercel deployment procedure is as follows:Log in to the Vercel dashboard and select Add New... > Project.Import the previously forked GitHub repository.Crucial Step: Within the Vercel project settings, the Root Directory must be explicitly set to Vercel. The vercel.json file in the repository's root is also configured to facilitate this.Navigate to the Environment Variables section and define the following:DATABASE_URL_UNPOOLED: The acquired PostgreSQL connection string.All FIREBASE_... configuration keys (as found in firebase-config.js).FIREBASE_API_KEY=your_api_key
+FIREBASE_AUTH_DOMAIN=your_auth_domain
+FIREBASE_PROJECT_ID=your_project_id
+# ...and so forth for all associated keys
 
-**Dashboard**
-- View statistics including total products, customers, orders, and revenue
-- Quick overview of business metrics
 
-**Sweets Management**
-- Add, edit, and delete products
-- Upload product images or use image URLs
-- Search products by name or category
-- Track inventory levels
 
-**Customer Management**
-- Maintain customer database
-- Store contact information and addresses
-- Edit or remove customer records
-
-**Order Management**
-- Create new orders by selecting customer and products
-- Update order status (pending, completed, cancelled)
-- Automatic inventory adjustment on order creation/deletion
-- View order history with details
-
-## API Endpoints
-
-### Sweets
-- `GET /api/sweets` - Get all sweets
-- `GET /api/sweets/:id` - Get sweet by ID
-- `POST /api/sweets` - Create new sweet
-- `PUT /api/sweets/:id` - Update sweet
-- `DELETE /api/sweets/:id` - Delete sweet
-
-### Customers
-- `GET /api/customers` - Get all customers
-- `GET /api/customers/:id` - Get customer by ID
-- `POST /api/customers` - Create new customer
-- `PUT /api/customers/:id` - Update customer
-- `DELETE /api/customers/:id` - Delete customer
-
-### Orders
-- `GET /api/orders` - Get all orders
-- `GET /api/orders/:id` - Get order by ID
-- `POST /api/orders` - Create new order
-- `PUT /api/orders/:id` - Update order status
-- `DELETE /api/orders/:id` - Delete order
-
-### Dashboard
-- `GET /api/dashboard/stats` - Get statistics
-- `GET /api/categories` - Get all categories
-- `GET /api/health` - Health check
-
-## Database Schema
-
-**Sweet**
-- id, name, description, price, stock, category, image_url, timestamps
-
-**Customer**
-- id, name, email (unique), phone, address, created_at
-
-**Order**
-- id, customer_id (FK), total_price, status, order_date
-
-**OrderItem**
-- id, order_id (FK), sweet_id (FK), quantity, price
-
-## Key Features
-
-**Inventory Management**
-- Real-time stock tracking
-- Automatic updates on order placement
-- Stock restoration on order cancellation
-- Visual low-stock indicators
-
-**Order Processing**
-- Multi-item order support
-- Automatic total calculation
-- Stock validation before order confirmation
-- Status tracking (pending/completed/cancelled)
-
-**API Design**
-- RESTful endpoints
-- Blueprint-based route organization
-- CORS enabled for cross-origin requests
-- JSON response format
-
-## Firebase Setup (Required)
-
-This application uses **Firebase Authentication**. Follow these steps:
-
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Create a new project (or use existing)
-3. Add a Web App to your project
-4. Go to **Authentication** > **Sign-in method** and enable:
-   - Email/Password
-   - Google (optional)
-5. Copy your Firebase SDK configuration
-6. Paste it in `frontend/firebase-config.js` (replace the existing `firebaseConfig` object)
-
-That's it! The same config file is used by all pages.
-
-## Deployment
-
-### GitHub
-The application is ready for GitHub deployment:
-1. Create a new repository on GitHub
-2. Push your code:
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin <your-repository-url>
-git push -u origin main
-```
-
-### Vercel Deployment (Recommended)
-
-This application is optimized for **Vercel** deployment with serverless functions:
-
-**Prerequisites:**
-
-- Vercel account (free tier works)
-- PostgreSQL database (Neon, Supabase, or any PostgreSQL provider)
-- Firebase project configured
-
-**Deployment Steps:**
-
-1. **Prepare Environment Variables**
-
-   In Vercel Dashboard → Settings → Environment Variables, add:
-
-   ```env
-   DATABASE_URL_UNPOOLED=postgresql://username:password@host:port/database
-   FIREBASE_API_KEY=your_firebase_api_key
-   FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
-   FIREBASE_PROJECT_ID=your_project_id
-   FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-   FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   FIREBASE_APP_ID=your_app_id
-   FIREBASE_MEASUREMENT_ID=your_measurement_id
-   ```
-
-2. **Deploy to Vercel**
-
-   ```bash
-   # Install Vercel CLI
-   npm i -g vercel
-
-   # Deploy from the Vercel folder
-   cd Vercel
-   vercel
-   ```
-
-   Or connect your GitHub repository in Vercel Dashboard for automatic deployments.
-
-3. **Configure Root Directory**
-
-   - In Vercel Dashboard → Settings → General
-   - Set Root Directory to `Vercel`
-   - Or use the root `vercel.json` file which handles this automatically
-
-4. **Update Firebase Console**
-
-   - Go to Firebase Console → Authentication → Settings
-   - Add your Vercel domain to Authorized domains (e.g., `your-app.vercel.app`)
-
-**Project Structure for Vercel:**
-
-```text
-Vercel/
-├── api/
-│   └── index.py         # Serverless Flask API (@vercel/python)
-├── frontend/
-│   ├── index.html       # Main app
-│   ├── login.html       # Login page
-│   ├── signup.html      # Signup page
+Initiate the deployment by selecting Deploy.Final Configuration: Navigate to the Firebase Console > Authentication > Settings > Authorized domains and append the Vercel application's assigned URL (e.g., mithai-mandir.vercel.app) to the list.📁 Repository Directory StructureThe repository employs a structured layout, including a dedicated Vercel directory for deployment, which exists in parallel with the primary development directories. This monorepo-style structure separates local development concerns from production-specific configurations..
+├── backend/            # <-- LOCAL: Flask backend logic
+│   ├── app.py          # Main Flask application (development)
+│   ├── database.py     # SQLAlchemy configuration (local SQLite)
+│   ├── models.py       # ORM data models
+│   ├── routes.py       # API route definitions
+│   └── seed_data.py    # Initial data seeding script
+├── frontend/           # <-- LOCAL: Frontend files
+│   ├── app.jsx         # React component definitions
+│   ├── auth.css        # Authentication page stylesheets
+│   ├── example_firebase-config.js # Template
+│   ├── firebase-config.js # Firebase setup (local)
 │   ├── forgot-password.html
-│   ├── app.jsx          # React components
-│   ├── style.css
-│   ├── auth.css
-│   └── firebase-config.js
-├── vercel.json          # Deployment configuration
-└── requirements.txt     # Python dependencies
-```
+│   ├── index.html      # Main HTML (React root)
+│   ├── login.html
+│   ├── signup.html
+│   └── style.css       # Main stylesheets
+├── venv/               # (Virtual environment, ignored)
+├── Vercel/             # <-- DEPLOYMENT ROOT (Designated in Vercel settings)
+│   ├── api/
+│   │   └── index.py    # Vercel Serverless Function entry point. This file 
+│   │                   # imports the Flask app from the `backend/` directory
+│   │                   # and exposes it as a serverless function.
+│   ├── frontend/       # A production-ready copy of the frontend.
+│   │                   # Vercel serves these static files directly.
+│   │   ├── app.jsx
+│   │   ├── auth.css
+│   │   ├── firebase-config.js
+│   │   ├── forgot-password.html
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   ├── signup.html
+│   │   └── style.css
+│   ├── .gitignore      # Ignores files specific to Vercel builds.
+│   ├── requirements.txt # Production-specific Python dependencies 
+│   │                    # (e.g., psycopg2-binary for PostgreSQL).
+│   └── vercel.json      # Vercel-specific configuration, defining build
+│                        # processes, rewrite rules (e.g., /api -> index.py),
+│                        # and static output directories.
+├── .gitattributes      # Defines file attributes for Git.
+├── .gitignore          # Root-level ignore file (e.g., venv, app.db, .pyc)
+├── README.md           # This document.
+├── requirements.txt    # Local development Python dependencies.
+└── vercel.json         # Root Vercel configuration file. Its primary
+                        # function is to instruct the Vercel platform
+                        # to utilize the `Vercel/` directory as the
+                        # project's root for all build and deployment
+                        # processes.
 
-**Key Features of Vercel Deployment:**
 
-- ✅ Serverless Flask backend with PostgreSQL
-- ✅ Static frontend hosting with CDN
-- ✅ Automatic HTTPS
-- ✅ Environment variable management
-- ✅ Automatic deployments on Git push
-- ✅ Zero-downtime deployments
-- ✅ Global edge network
-
-**Database Setup:**
-
-- Use Neon, Supabase, or any PostgreSQL provider
-- Tables are created automatically on first deployment
-- Copy the connection string and add it to Vercel environment variables as `DATABASE_URL_UNPOOLED`
-
-**Live Demo:**
-
-<https://sweet-shop-management-system-five-umber.vercel.app/>
-
-### Other Platforms
-
-The backend can also be deployed as a standard Flask application:
-
-1. Deploy the backend to Heroku, Railway, Render, etc.
-2. Update the API_URL in `frontend/app.jsx`
-3. Deploy frontend to Netlify or Firebase Hosting
-4. Update CORS settings in backend if needed
-
-**Important:** Remember to update Firebase configuration with your production domain in the Firebase Console under Authentication → Settings → Authorized domains.
-
+⚙️ Technical DetailsFurther technical specifications are encapsulated in the sections below.<details><summary><b>API Endpoint Specification</b></summary>SweetsGET /api/sweets - Retrieves all 'sweet' entities.GET /api/sweets/:id - Retrieves a singular 'sweet' entity by its unique identifier.POST /api/sweets - Creates a new 'sweet' entity.PUT /api/sweets/:id - Updates an existing 'sweet' entity.DELETE /api/sweets/:id - Deletes a 'sweet' entity.CustomersGET /api/customers - Retrieves all 'customer' entities.GET /api/customers/:id - Retrieves a singular 'customer' entity by its unique identifier.POST /api/customers - Creates a new 'customer' entity.PUT /api/customers/:id - Updates an existing 'customer' entity.DELETE /api/customers/:id - Deletes a 'customer' entity.OrdersGET /api/orders - Retrieves all 'order' entities.GET /api/orders/:id - Retrieves a singular 'order' entity by its unique identifier.POST /api/orders - Creates a new 'order' entity.PUT /api/orders/:id - Updates the status of an existing 'order'.DELETE /api/orders/:id - DeJletes an 'order' entity.DashboardGET /api/dashboard/stats - Retrieves aggregated statistical data.GET /api/categories - Retrieves all product categories.GET /api/health - Provides an API health check endpoint.</details><details><summary><b>View Database Schema</b></summary>Sweetid, name, description, price, stock, category, image_url, timestampsCustomerid, name, email (unique), phone, address, created_atOrderid, customer_id (FK), total_price, status, order_dateOrderItemid, order_S_id (FK), sweet_id (FK), quantity, price</details>
